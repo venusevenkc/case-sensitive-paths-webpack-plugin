@@ -5,7 +5,7 @@ This Webpack plugin enforces the entire path of all required modules match the e
 Using this plugin helps alleviate cases where developers working on OSX, which does not follow strict path case sensitivity,
 will cause conflicts with other developers or build boxes running Linux, which does require correctly cased paths.
 
-Previous iterations on this same theme provide the basis for this plugin, but unfortunately do not properly check case on
+[Previous](https://gist.github.com/Morhaus/333579c2a5b4db644bd50) [iterations](https://github.com/dcousineau/force-case-sensitivity-webpack-plugin) on this same idea provide the basis for this plugin, but unfortunately do not properly check case on
 the entire path. This plugin fixes that. Example output:
 
 > ERROR in ./src/containers/SearchProducts.js
@@ -36,5 +36,5 @@ I would appreciate a pull request.
    
 Thanks & Credit
 ----
-Daniel who wrote an earlier version of this case-sensitivity plugin
-Alexandre Kirszenberg who's gist formed the basis of both these plugins.
+(Daniel Cousineau)[https://github.com/dcousineau] who wrote an [earlier version](https://github.com/dcousineau/force-case-sensitivity-webpack-plugin) of this case-sensitivity plugin
+(Alexandre Kirszenberg)[https://github.com/Morhaus] who's [gist](https://gist.github.com/Morhaus/333579c2a5b4db644bd5) formed the basis of both these plugins.
