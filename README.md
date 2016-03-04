@@ -36,5 +36,5 @@ I would appreciate a pull request.
    
 Thanks & Credit
 ----
-(Daniel Cousineau)[https://github.com/dcousineau] who wrote an [earlier version](https://github.com/dcousineau/force-case-sensitivity-webpack-plugin) of this case-sensitivity plugin
-(Alexandre Kirszenberg)[https://github.com/Morhaus] who's [gist](https://gist.github.com/Morhaus/333579c2a5b4db644bd5) formed the basis of both these plugins.
+* [Daniel Cousineau](https://github.com/dcousineau) who wrote an [earlier version](https://github.com/dcousineau/force-case-sensitivity-webpack-plugin) of this case-sensitivity plugin
+* [Alexandre Kirszenberg](https://github.com/Morhaus) who's [gist](https://gist.github.com/Morhaus/333579c2a5b4db644bd5) formed the basis of both these plugins.
