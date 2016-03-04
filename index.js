@@ -35,6 +35,7 @@ CaseSensitivePathsPlugin.prototype.apply = function(compiler) {
 
             // This function based on code found at http://stackoverflow.com/questions/27367261/check-if-file-exists-case-sensitive
             // By Patrick McElhaney (No license indicated - Stack Overflow Answer)
+            // This version will return with the real name of any incorrectly-cased portion of the path, null otherwise.
             function fileExistsWithCaseSync(filepath) {
                 var dir = path.dirname(filepath);
                 if (dir === '/' || dir === '.') return;
@@ -47,18 +48,17 @@ CaseSensitivePathsPlugin.prototype.apply = function(compiler) {
                         lowercasedFilenames.push(filenames[i].toLowerCase());
                     }
                     var index = lowercasedFilenames.indexOf(path.basename(filepath).toLowerCase());
-                    return filenames[index];
+                    return path.join(dir, filenames[index]);
                 }
                 return fileExistsWithCaseSync(dir);
             }
 
             // Trim ? off, since some loaders add that to the resource they're attemping to load
             var pathName = data.resource.split('?')[0];
-
             var realName = fileExistsWithCaseSync(pathName);
 
             if (realName) {
-                done(new Error('CaseSensitivePathsPlugin: `' + path.basename(pathName) + '` does not match the corresponding file on disk `' + realName + '`'));
+                done(new Error('CaseSensitivePathsPlugin: `' + pathName + '` does not match the corresponding path on disk `' + realName + '`'));
             } else {
                 done(null, data);
             }
