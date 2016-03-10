@@ -26,7 +26,6 @@ This plugin license, also MIT:
 
 var path = require('path');
 var fs = require('fs');
-var os = require('os');
 
 function CaseSensitivePathsPlugin() {}
 
