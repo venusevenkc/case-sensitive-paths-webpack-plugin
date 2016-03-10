@@ -26,6 +26,7 @@ This plugin license, also MIT:
 
 var path = require('path');
 var fs = require('fs');
+var os = require('os');
 
 function CaseSensitivePathsPlugin() {}
 
@@ -38,7 +39,7 @@ CaseSensitivePathsPlugin.prototype.apply = function(compiler) {
             // This version will return with the real name of any incorrectly-cased portion of the path, null otherwise.
             function fileExistsWithCaseSync(filepath) {
                 var dir = path.dirname(filepath);
-                if (dir === '/' || dir === '.') return;
+                if ((dir === '/' || (os.platform() === 'win32' && dir.split(':')[1] === '\\')) || dir === '.') return;
                 var filenames = fs.readdirSync(dir);
                 if (filenames.indexOf(path.basename(filepath)) === - 1) {
 
