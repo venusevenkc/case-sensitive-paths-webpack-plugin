@@ -29,9 +29,14 @@ Usage
         // other webpack config ...
     }
     
+
+Demo
+---
+Check the `/demo` directory for a working example of the plugin in action, with tests demonstrating the effect of the plugin. See `/demo/README.md` for more. 
+
 Want to help?
 ----
-This module could use unit testing, but I'm not sure how to test a Webpack plugin. If you use this module and know how to test it,
+This module could use more granular unit-testing, but I'm not sure how to test a Webpack plugin. If you use this module and know how to test it,
 I would appreciate a pull request.
    
 Thanks & Credit
