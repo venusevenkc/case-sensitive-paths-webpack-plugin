@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+var CaseSensitivePathsPlugin = require('../index.js'); // use inside the npm package
 
 // We use the NODE_ENV in our automation commands to differentiate environments
 var production =

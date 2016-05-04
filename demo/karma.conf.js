@@ -1,7 +1,7 @@
 // karma.conf.js
 const webpack = require('webpack');
 const wpc = require('./webpack.config');
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const CaseSensitivePathsPlugin = require('../index.js'); // use inside the npm package
 
 
 module.exports = function(config) {
