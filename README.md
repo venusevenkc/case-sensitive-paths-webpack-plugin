@@ -28,19 +28,15 @@ Usage
         ]
         // other webpack config ...
     }
-    
+
 
 Demo
 ---
-Check the `/demo` directory for a working example of the plugin in action, with tests demonstrating the effect of the plugin. See `/demo/README.md` for more. 
+Check the `/demo` directory for a working example of the plugin in action, with tests demonstrating the effect of the plugin. See `/demo/README.md` for more.
 
-Want to help?
-----
-This module could use more granular unit-testing, but I'm not sure how to test a Webpack plugin. If you use this module and know how to test it,
-I would appreciate a pull request.
-   
 Thanks & Credit
 ----
 * [Daniel Cousineau](https://github.com/dcousineau) who wrote an [earlier version](https://github.com/dcousineau/force-case-sensitivity-webpack-plugin) of this case-sensitivity plugin
 * [Alexandre Kirszenberg](https://github.com/Morhaus) who's [gist](https://gist.github.com/Morhaus/333579c2a5b4db644bd5) formed the basis of both these plugins.
 * [Cameron Brewer](https://github.com/morethanfire) and [Ben Collins](https://github.com/aggieben) who added Windows support.
+* [Christian Lilley](https://github.com/xml) who added a demo/test package.
