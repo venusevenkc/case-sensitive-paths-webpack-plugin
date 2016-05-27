@@ -27,40 +27,83 @@ This plugin license, also MIT:
 var path = require('path');
 var fs = require('fs');
 
-function CaseSensitivePathsPlugin() {}
+function CaseSensitivePathsPlugin(options) {
+    // Keep cache of filesystem contents along path reduce FS operations
+    this.pathCache = {};
+    this.fsOperations = 0;
+    this.options = options || {};
+}
+
+CaseSensitivePathsPlugin.prototype.getFilenamesInDir = function (dir) {
+    if (this.pathCache.hasOwnProperty(dir)) {
+        return this.pathCache[dir];
+    } else {
+        this.fsOperations += 1;
+        if (this.options.debug) {
+            console.log('reading', dir);
+        }
+        return fs.readdirSync(dir);
+    }
+};
+
+// This function based on code found at http://stackoverflow.com/questions/27367261/check-if-file-exists-case-sensitive
+// By Patrick McElhaney (No license indicated - Stack Overflow Answer)
+// This version will return with the real name of any incorrectly-cased portion of the path, null otherwise.
+CaseSensitivePathsPlugin.prototype.fileExistsWithCaseSync = function (filepath) {
+    // Split filepath into current filename (or directory name) and parent directory tree.
+    var dir = path.dirname(filepath);
+    var filename = path.basename(filepath);
+    var parsedPath = path.parse(dir);
+
+    // If we are at the root, or have found a path we already know is good, return.
+    if (parsedPath.dir === parsedPath.root || dir === '.' || this.pathCache.hasOwnProperty(filepath)) return;
+
+    // Check all filenames in the current dir against current filename to ensure one of them matches.
+    // Read from the cache if available, from FS if not.
+    var filenames = this.getFilenamesInDir(dir);
+
+    // If the exact match does not exist, attempt to find the correct filename.
+    if (filenames.indexOf(filename) === - 1) {
+        // Fallback value, just in case.
+        var correctFilename = '(Unable to determine)';
+
+        for (var i = 0; i < filenames.length; i++) {
+            if (filenames[i].toLowerCase() === filename.toLowerCase()) {
+                correctFilename = filenames[i];
+                break;
+            }
+        }
+        return correctFilename;
+    }
+
+    // If exact match exists, recurse through directory tree until root.
+    var recurse =  this.fileExistsWithCaseSync(dir);
+
+    // If found an error elsewhere, return that correct filename
+    // Don't bother caching - we're about to error out anyway.
+    if (recurse) {
+        return recurse;
+    }
+
+    // If no error elsewhere, this is known good - store in the cache.
+    this.pathCache[dir] = filenames;
+}
 
 CaseSensitivePathsPlugin.prototype.apply = function(compiler) {
+    var _this = this;
     compiler.plugin('normal-module-factory', function(nmf) {
         nmf.plugin('after-resolve', function(data, done) {
 
-            // This function based on code found at http://stackoverflow.com/questions/27367261/check-if-file-exists-case-sensitive
-            // By Patrick McElhaney (No license indicated - Stack Overflow Answer)
-            // This version will return with the real name of any incorrectly-cased portion of the path, null otherwise.
-            function fileExistsWithCaseSync(filepath) {
-                var dir = path.dirname(filepath);
-                var parsedPath = path.parse(dir);
-                if (parsedPath.dir === parsedPath.root || dir === '.') return;
-                var filenames = fs.readdirSync(dir);
-                if (filenames.indexOf(path.basename(filepath)) === - 1) {
-
-                    // This could easily be accomplished with various requires, but I want to keep this module thin.
-                    var lowercasedFilenames = [];
-                    for (var i = 0; i < filenames.length; i++) {
-                        lowercasedFilenames.push(filenames[i].toLowerCase());
-                    }
-                    var index = lowercasedFilenames.indexOf(path.basename(filepath).toLowerCase());
-                    return path.join(dir, filenames[index]);
-                }
-                return fileExistsWithCaseSync(dir);
-            }
-
             // Trim ? off, since some loaders add that to the resource they're attemping to load
             var pathName = data.resource.split('?')[0];
-            var realName = fileExistsWithCaseSync(pathName);
+            var realName = _this.fileExistsWithCaseSync(pathName);
 
             if (realName) {
                 done(new Error('CaseSensitivePathsPlugin: `' + pathName + '` does not match the corresponding path on disk `' + realName + '`'));
             } else {
+                if (_this.options.debug) {
+                    console.log('total fs operations', _this.fsOperations);
+                }
                 done(null, data);
             }
         });
