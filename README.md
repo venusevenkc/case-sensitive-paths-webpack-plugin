@@ -9,7 +9,7 @@ will cause conflicts with other developers or build boxes running other operatin
 the entire path. This plugin fixes that. Example output:
 
 > ERROR in ./src/containers/SearchProducts.js
-  Module not found: Error: CaseSensitivePathsPlugin: `/Users/example/yourproject/src/components/searchProducts/searchproducts.js` does not match the corresponding path on disk `/Users/example/yourproject/src/components/searchproducts`
+  Module not found: Error: [CaseSensitivePathsPlugin] `/Users/example/yourproject/src/components/searchProducts/searchproducts.js` does not match the corresponding path on disk `/Users/example/yourproject/src/components/searchproducts`
    @ ./src/containers/SearchProducts.js 9:22-84
 
 Install

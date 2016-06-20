@@ -40,7 +40,7 @@ CaseSensitivePathsPlugin.prototype.getFilenamesInDir = function (dir) {
     } else {
         this.fsOperations += 1;
         if (this.options.debug) {
-            console.log('reading', dir);
+            console.log('[CaseSensitivePathsPlugin] Reading directory', dir);
         }
         return fs.readdirSync(dir);
     }
@@ -65,11 +65,11 @@ CaseSensitivePathsPlugin.prototype.fileExistsWithCaseSync = function (filepath) 
     // If the exact match does not exist, attempt to find the correct filename.
     if (filenames.indexOf(filename) === - 1) {
         // Fallback value, just in case.
-        var correctFilename = '(Unable to determine)';
+        var correctFilename = '- File does not exist.';
 
         for (var i = 0; i < filenames.length; i++) {
             if (filenames[i].toLowerCase() === filename.toLowerCase()) {
-                correctFilename = filenames[i];
+                correctFilename = '`' + filenames[i] + '`.';
                 break;
             }
         }
@@ -91,6 +91,15 @@ CaseSensitivePathsPlugin.prototype.fileExistsWithCaseSync = function (filepath) 
 
 CaseSensitivePathsPlugin.prototype.apply = function(compiler) {
     var _this = this;
+
+    compiler.plugin('done', function() {
+        if (_this.options.debug) {
+            console.log('[CaseSensitivePathsPlugin] Total filesystem reads:', _this.fsOperations);
+        }
+        _this.pathCache = {};
+        _this.fsOperations = 0;
+    });
+
     compiler.plugin('normal-module-factory', function(nmf) {
         nmf.plugin('after-resolve', function(data, done) {
 
@@ -99,11 +108,8 @@ CaseSensitivePathsPlugin.prototype.apply = function(compiler) {
             var realName = _this.fileExistsWithCaseSync(pathName);
 
             if (realName) {
-                done(new Error('CaseSensitivePathsPlugin: `' + pathName + '` does not match the corresponding path on disk `' + realName + '`'));
+                done(new Error('[CaseSensitivePathsPlugin] `' + pathName + '` does not match the corresponding path on disk ' + realName));
             } else {
-                if (_this.options.debug) {
-                    console.log('total fs operations', _this.fsOperations);
-                }
                 done(null, data);
             }
         });
