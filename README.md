@@ -46,3 +46,4 @@ Thanks & Credit
 * [Alexandre Kirszenberg](https://github.com/Morhaus) who's [gist](https://gist.github.com/Morhaus/333579c2a5b4db644bd5) formed the basis of both these plugins.
 * [Cameron Brewer](https://github.com/morethanfire) and [Ben Collins](https://github.com/aggieben) who added Windows support.
 * [Christian Lilley](https://github.com/xml) who added a demo/test package.
+* [Lance Eastgate](https://github.com/NorwegianKiwi) who added some internationalization support
