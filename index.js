@@ -42,7 +42,7 @@ CaseSensitivePathsPlugin.prototype.getFilenamesInDir = function (dir) {
         if (this.options.debug) {
             console.log('[CaseSensitivePathsPlugin] Reading directory', dir);
         }
-        return fs.readdirSync(dir);
+        return fs.readdirSync(dir).map(function(f) { return f.normalize ? f.normalize('NFC') : f; });
     }
 };
 
@@ -105,6 +105,7 @@ CaseSensitivePathsPlugin.prototype.apply = function(compiler) {
 
             // Trim ? off, since some loaders add that to the resource they're attemping to load
             var pathName = data.resource.split('?')[0];
+            pathName =  pathName.normalize ? pathName.normalize('NFC') : pathName;
             var realName = _this.fileExistsWithCaseSync(pathName);
 
             if (realName) {
